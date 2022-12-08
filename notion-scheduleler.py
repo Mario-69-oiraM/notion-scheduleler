@@ -134,7 +134,7 @@ def actions():
     return False
 
 def main():
-    if str(os.getenv('NOTION_TOKEN')) != None:
+    if str(os.getenv('NOTION_TOKEN')) != 'None':
         print("NOTION_TOKEN = " + str(os.getenv('NOTION_TOKEN')))
         #ReadRepeatfromNotionAction('Daily')
 
