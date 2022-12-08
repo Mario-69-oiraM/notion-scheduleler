@@ -1,0 +1,10 @@
+docker pull python
+
+docker run -it --name notionscheduleler python
+docker run -d -t --name notionscheduleler python
+                              
+
+docker run -it --name mycontainer2 python
+
+python Notion-scheduleler.py
+
