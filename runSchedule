@@ -1,4 +1,5 @@
 ##
+# docker run -d -t --name notionscheduleler python
 
 git config credential.helper cache
 
