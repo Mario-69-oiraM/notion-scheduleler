@@ -7,6 +7,12 @@ docker exec -it notionscheduleler bin/bash
 
 pip install requests
 
+apt-get install nano
+
+export EDITOR=nano
+
+apt-get install cron
+
 #git config credential.helper cache
 
 git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
@@ -14,6 +20,9 @@ git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 chmod 755 runSchedule
 
 export NOTION_TOKEN=
+
+git config credential.helper cache
+
 
 
 ##### Notes below 
