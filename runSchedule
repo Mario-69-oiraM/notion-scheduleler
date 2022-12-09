@@ -1,5 +1,7 @@
 ##
 
+git config credential.helper cache
+
 git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 
 python notion-scheduleler.py
