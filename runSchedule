@@ -12,4 +12,4 @@ git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 # chmod 755 runSchedule
 # export NOTION_TOKEN=
 
-python notion-scheduleler.py
+python notion-scheduleler.py >> log.txt
