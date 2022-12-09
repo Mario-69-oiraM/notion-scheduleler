@@ -1,13 +1,25 @@
 
+# manual steps to setup container 
+
 docker run -d -t --name notionscheduleler python
-docker run --name notionscheduleler pip install requests
+
+docker exec -it notionscheduleler bin/bash                    
+
+pip install requests
+
+#git config credential.helper cache
+
+git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
+
+chmod 755 runSchedule
+
+export NOTION_TOKEN=
 
 
+##### Notes below 
 
-# git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
-# pip install requests
+
 # docker run --name notionscheduleler pip install requests
-
 
 git config credential.helper cache
 
