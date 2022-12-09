@@ -1,5 +1,5 @@
 ##
 
-git pull
+git pull https://mario-69-mario@https://github.com/Mario-69-Mario/notion-scheduleler master
 
 python notion-scheduleler.py
