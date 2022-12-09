@@ -1,0 +1,5 @@
+##
+
+git pull
+
+/usr/bin/python3 notion-scheduleler.py
