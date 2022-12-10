@@ -3,6 +3,8 @@
 # git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 # pip install requests
 
+/usr/config
+
 cd /usr/notion-scheduleler
 
 git config credential.helper cache
