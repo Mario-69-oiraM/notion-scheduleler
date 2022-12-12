@@ -8,12 +8,6 @@
 
 # docker exec -it notionscheduleler bin/pip install requests
 
-# pip install requests
-
-# apt-get update
-
-# apt-get install nano
-
 #cexport EDITOR=nano
 
 # apt-get install cron
