@@ -1,21 +1,35 @@
 
 # manual steps to setup container 
+# pip freeze > requirements.txt
 
-docker run -d -t --name notionscheduleler python
+# docker run -d -t --name notionscheduleler python
 
-docker exec -it notionscheduleler bin/bash                    
+# docker exec -it notionscheduleler bin/bash                    
 
-pip install requests
+# docker exec -it notionscheduleler bin/pip install requests
 
-apt-get install nano
+# pip install requests
 
-export EDITOR=nano
+# apt-get update
 
-apt-get install cron
+# apt-get install nano
+
+#cexport EDITOR=nano
+
+# apt-get install cron
 
 #git config credential.helper cache
 
+# docker run -d -t --name notionscheduleler my-python
+
+
+docker build -t my-python . 
+
+docker run -d --name notionscheduleler my-python
+
 git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
+
+cd notion-scheduleler/
 
 chmod 755 runSchedule
 
