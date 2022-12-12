@@ -46,7 +46,7 @@ def ReadRepeatfromNotionAction(Repeat):
 
     data = ' {"filter": { "property": '
     data +=  ' "Repeat", "select" : {"equals": "' + Repeat + '" '
-    data +=  ' } } } ' 
+    data +=  ' } } } '
 
     response = requests.post(NotionAPIDatabases + actions_database_id + '/query', headers=NotionHeader, data=data)
     
@@ -75,7 +75,7 @@ def ReadRepeatfromNotionAction(Repeat):
                 print("Add new record")
                 return True
     else:
-        print("Error: " + response.status_code + " | " + response.text)
+        print("Error: " + str(response.status_code) + " | " + response.text)
         return False
     return False 
 
