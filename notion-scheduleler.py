@@ -72,7 +72,7 @@ def ReadRepeatfromNotionAction(Repeat):
                 else:
                     print('do nothing :' + title) 
             else:
-                print("Add new record")
+                print("Empty record " + str(datetime.datetime.now()))
                 return True
     else:
         print("Error: " + str(response.status_code) + " | " + response.text)
