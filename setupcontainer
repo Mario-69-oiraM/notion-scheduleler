@@ -1,3 +1,9 @@
+git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
+
+docker build -t my-python --build-arg NOTION_TOKEN=$NOTION_TOKEN .
+
+docker run -d --name notionscheduleler my-python
+
 
 # manual steps to setup container 
 # pip freeze > requirements.txt
@@ -17,32 +23,17 @@
 # docker run -d -t --name notionscheduleler my-python
 
 
-docker build -t my-python . 
-
-docker run -d --name notionscheduleler my-python
-
-git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
-
-cd notion-scheduleler/
-
-chmod 755 runSchedule
-
-export NOTION_TOKEN=
-
-git config credential.helper cache
-
-
 
 ##### Notes below 
 
 
 # docker run --name notionscheduleler pip install requests
 
-git config credential.helper cache
+#git config credential.helper cache
 
-git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
+#git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 
 # chmod 755 runSchedule
 # export NOTION_TOKEN=
 
-python notion-scheduleler.py
+#python notion-scheduleler.py
