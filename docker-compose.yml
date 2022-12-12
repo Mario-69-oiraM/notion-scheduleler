@@ -1,7 +1,6 @@
 version: "3"
 services:
-  weekly:
-    image: python:latest
-    deploy:
-      replicas: 1
-    
+  notionscheduleler:
+    image: python
+    ports:
+      - "8080:80"
