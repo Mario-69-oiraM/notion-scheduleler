@@ -3,13 +3,13 @@
 # git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 # pip install requests
 
-/usr/config
+#/usr/config
 
-cd /usr/notion-scheduleler
+#cd /usr/notion-scheduleler
 
-git config credential.helper cache
+#git config credential.helper cache
 
-git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
+#git pull https://mario-69-mario@github.com/Mario-69-Mario/notion-scheduleler
 
 # chmod 755 runSchedule
 # export NOTION_TOKEN=
