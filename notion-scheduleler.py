@@ -170,6 +170,5 @@ def main():
     #    ReadfromNotionAction(ln.replace('\n',''))
 
 
-
 if __name__ == "__main__":
     main()
