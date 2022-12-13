@@ -38,6 +38,7 @@ def ReadRepeatfromNotionAction(Repeat):
     
     today = date.today()
     weeknumber = (today.isocalendar()[1] + 1 )
+    log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n'
     
     print(today)
     print(weeknumber)
@@ -67,17 +68,20 @@ def ReadRepeatfromNotionAction(Repeat):
                 
                 if done == True and weeknumber > weeknumber_doDate and repeat == "Weekly":
                     print('Update done flag and update do date to + 7 days :' + title)
+                    log += 'Update done flag and update do date to + 7 days :' + title
                     dodate = dodate + datetime.timedelta(days=7)
                     UpdateAction(id, dodate, title)
                 else:
+                    log += 'do nothing :' + title
                     print('do nothing :' + title) 
             else:
                 print("Empty record " + str(datetime.datetime.now()))
-                return True
+            
     else:
         print("Error: " + str(response.status_code) + " | " + response.text)
         return False
-    return False 
+    updatelog(log)    
+    return True
 
 def UpdateAction(id, Action_Date, title):
     Action_Date_str = Action_Date.strftime('%Y-%m-%d')
@@ -124,6 +128,26 @@ def UpdateAction(id, Action_Date, title):
             return False
 
 
+    except:  
+        return False
+    
+def updatelog(log):
+    try:
+        updateData = ' { "properties":  '
+        updateData += ' { '
+        updateData += '     "Done": {'
+        updateData += '            "checkbox": false '
+        updateData += '              }, '
+        updateData += '       "Do Date": { '
+        updateData += '         "date": { '
+        updateData += '                 "start": "' + Action_Date_str + '" '
+        updateData += '                  } ' 
+        updateData += '                } '
+        updateData += ' } }'
+
+        #response = requests.request("PATCH", NotionAPIPages + id, headers=NotionHeader, data=updateData)
+    
+        return True
     except:  
         return False
         
