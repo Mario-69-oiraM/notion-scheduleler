@@ -1,6 +1,6 @@
 echo "# Auto build from buildContainer script"  > crontab
-echo export NOTION_TOKEN=$NOTION_TOKEN >> crontab
-echo export PYTHONPATH=/app/appRequirements >> crontab
+echo NOTION_TOKEN=$NOTION_TOKEN >> crontab
+echo PYTHONPATH=/app/appRequirements >> crontab
 echo " " >> crontab
 echo "# Run automation every min" >> crontab
 echo "* * * * * bash /app/runSchedule.sh >> /var/log/myjob.log 2>&1" >> crontab
