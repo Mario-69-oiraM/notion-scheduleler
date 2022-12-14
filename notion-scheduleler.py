@@ -160,7 +160,7 @@ def actions():
 
 def main():
     if str(os.getenv('NOTION_TOKEN')) != 'None':
-        print("NOTION_TOKEN = " + str(os.getenv('NOTION_TOKEN')))
+        print("NOTION_TOKEN = found " )
         #ReadRepeatfromNotionAction('Daily')
 
         ReadRepeatfromNotionAction(Weekly)
