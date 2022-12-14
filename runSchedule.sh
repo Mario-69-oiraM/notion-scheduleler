@@ -20,5 +20,5 @@ git# git clone https://mario-69-mario@github.com/Mario-69-Mario/notion-schedulel
 cd /git
 git pull
 cd /app
-cp *.py . 
+cp /git/*.py . 
 python3 /app/notion-scheduleler.py
