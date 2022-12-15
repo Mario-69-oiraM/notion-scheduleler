@@ -1,4 +1,4 @@
-f [ -d "/app/tempClone" ] 
+if [ -d "/app/tempClone" ] 
 then
     echo "Directory /path/to/dir exists." 
     cd /app/tempClone
