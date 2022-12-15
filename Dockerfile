@@ -17,6 +17,9 @@ RUN apt-get update && apt-get -y install nano
 # copy the scripts to the folder
 COPY . /app
 
+RUN apk add --no-cache tzd ata
+ENV TZ America/Los_Angeles
+
 ARG NOTION_TOKEN
 ENV NOTION_TOKEN ${NOTION_TOKEN}
 
