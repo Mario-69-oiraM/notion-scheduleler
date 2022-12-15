@@ -1,2 +1,2 @@
 # Run automation every min
-* * * * * bash /app/runSchedule.sh >> /var/log/myjob.log 2>&1
+*/15 * * * * bash /app/runSchedule.sh >> /var/log/myjob.log 2>&1
