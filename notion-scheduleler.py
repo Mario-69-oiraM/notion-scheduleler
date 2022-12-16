@@ -77,17 +77,17 @@ def ReadRepeatfromNotionAction():
                 
                 if done == True and repeat == Weekly: #and weeknumber > weeknumber_doDate:
                     dodate = dodate + datetime.timedelta(days=7)
-                    UpdateAction(id, FromDate, dodate, title)
+                    UpdateAction(id, FromDate, dodate, title, repeat)
 
                 if done == True and repeat == Bi_weekly: # and (weeknumber - 1) > (weeknumber_doDate) 
                     dodate = dodate + datetime.timedelta(days=14)
-                    UpdateAction(id, FromDate, dodate, title)
+                    UpdateAction(id, FromDate, dodate, title, repeat)
 
                 elif done == True and repeat == Every_work_day: #and dodate < today 
                     dodate = dodate + datetime.timedelta(days=1)
                     while dodate.isoweekday() >= 6:
                         dodate = dodate + datetime.timedelta(days=1)
-                    UpdateAction(id, FromDate, dodate, title)
+                    UpdateAction(id, FromDate, dodate, title, repeat)
                     log += 'Update ' + Every_work_day + ' > ' + title
 
                 else:
@@ -102,7 +102,7 @@ def ReadRepeatfromNotionAction():
     updatelog(log)    
     return True
 
-def UpdateAction(id, FromDate, Action_Date, title):
+def UpdateAction(id, FromDate, Action_Date, title, repeat):
     Action_Date_str = Action_Date.strftime('%Y-%m-%d')
     try:
         updateData = ' { "properties":  '
@@ -123,7 +123,7 @@ def UpdateAction(id, FromDate, Action_Date, title):
             print ("Error: " + response.text )
             return False
 
-        Comment = 'Updated ' + title + ' repeat date ' + FromDate.strftime('%Y-%m-%d') + ' to ' + Action_Date.strftime('%Y-%m-%d') 
+        Comment = 'Updated >' + title + '< repeat date [' + repeat + '] from::' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
 
         updateComment = ' {"parent": { '
         updateComment += ' "page_id": "' + id + '" '
