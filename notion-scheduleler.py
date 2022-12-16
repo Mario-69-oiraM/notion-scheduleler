@@ -36,7 +36,7 @@ NotionAPICommnets = 'https://api.notion.com/v1/comments/'
 def SaveResult(Json_text):
     with open('.db2.json','w',encoding='utf8') as f:
             json.dump(Json_text,f,ensure_ascii=False)  
-None    return True
+    return True
 
 def logfile(log):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
