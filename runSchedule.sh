@@ -15,3 +15,5 @@ cd /app
 cp /app/tempClone/*.py /app
 
 python3 /app/notion-scheduleler.py
+
+tail -100 /app/schedulelerlog.txt > /app/schedulelerlog.txt
