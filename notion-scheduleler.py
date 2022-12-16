@@ -40,7 +40,7 @@ def SaveResult(Json_text):
 
 def logfile(log):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    f = open("Log.txt", "a")
+    f = open("schedulelerlog.txt", "a")
     f.writelines(ts + ' | ' + log +'\n')
     f.close()
     return True 
