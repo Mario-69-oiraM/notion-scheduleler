@@ -36,6 +36,14 @@ NotionAPICommnets = 'https://api.notion.com/v1/comments/'
 def SaveResult(Json_text):
     with open('.db2.json','w',encoding='utf8') as f:
             json.dump(Json_text,f,ensure_ascii=False)  
+None    return True
+
+def logfile(log):
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    f = open("Log.txt", "a")
+    f.writelines(ts + ' | ' + log +'\n')
+    f.close()
+    return True 
 
 
 def ReadRepeatfromNotionAction():
@@ -43,13 +51,6 @@ def ReadRepeatfromNotionAction():
     today = date.today()
     FromDate = date.today()
     weeknumber = (today.isocalendar()[1] + 1 )
-
-    log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n'
-    
-    print(today)
-    print(weeknumber)
-
-    #data +=  ' "title" , "rich_text": {"contains": "' + Action_title + '" '
 
     data = ' {"filter": { "or": [ '
     data +=  ' { "property": "Repeat", "select" : {"equals": "' + Weekly + '" } }, '
@@ -59,12 +60,12 @@ def ReadRepeatfromNotionAction():
 
     response = requests.post(NotionAPIDatabases + actions_database_id + '/query', headers=NotionHeader, data=data)
     
-    print(response.status_code)
+    logfile('Notion Connection ' + str(response.status_code))
+    logfile('##########################################################')
+
     if response.status_code == 200: 
         data_dict = json.loads(response.text)
         if bool(data_dict["results"]):
-            #print(data_dict["results"][0]["properties"])
-            #SaveResult(data_dict["results"])
             for OneItem in data_dict["results"]:
                 SaveResult(OneItem)
                 id = OneItem["id"]
@@ -88,18 +89,16 @@ def ReadRepeatfromNotionAction():
                     while dodate.isoweekday() >= 6:
                         dodate = dodate + datetime.timedelta(days=1)
                     UpdateAction(id, FromDate, dodate, title, repeat)
-                    log += 'Update ' + Every_work_day + ' > ' + title
 
                 else:
-                    log += 'do nothing :' + title
-                    print('do nothing :' + title) 
-            else:
-                print("Empty record " + str(datetime.datetime.now()))
+                    logfile('do nothing :' + title) 
+                    #print('do nothing :' + title) 
+            #else:
+            #    logfile("Empty record ")
             
     else:
-        print("Error: " + str(response.status_code) + " | " + response.text)
-        return False
-    updatelog(log)    
+        logfile("Error: " + str(response.status_code) + " | " + response.text)
+        return False    
     return True
 
 def UpdateAction(id, FromDate, Action_Date, title, repeat):
@@ -123,7 +122,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
             print ("Error: " + response.text )
             return False
 
-        Comment = title + ' Updated -: repeat date [' + repeat + '] from::' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
+        Comment = title + ' Updated -: repeat date [' + repeat + '] from:' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
 
         updateComment = ' {"parent": { '
         updateComment += ' "page_id": "' + id + '" '
@@ -139,16 +138,13 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         response = requests.request("POST", NotionAPICommnets, headers=NotionHeader, data=updateComment)
 
         if response.status_code == 200:
-            print(Comment)
-            log += Comment + '/n'
+            logfile(Comment)
             return True
         else:
-            log += "Error: " + response.text
-            print ("Error: " + response.text )
+            logfile("Error: " + response.text)
             return False
-
-
-    except:  
+    except: 
+        logfile("Error: UpdateAction" )
         return False
     
 def updatelog(log):
@@ -170,20 +166,19 @@ def updatelog(log):
         return True
     except:  
         return False
-        
-def actions():
-    with open('Actions.txt') as f:
-        string = f.readlines()
-        return string
-    return False
+
+            
 
 def main():
-    if str(os.getenv('NOTION_TOKEN')) != 'None':
-        print("NOTION_TOKEN = found " )
-
-        ReadRepeatfromNotionAction()
-    else:
-        print("Error: NOTION_TOKEN missing " )
+    try: 
+        if str(os.getenv('NOTION_TOKEN')) != 'None':
+            logfile("NOTION_TOKEN = found " )
+            ReadRepeatfromNotionAction()
+        else:
+            logfile("Error: NOTION_TOKEN missing " )
+    except Exception as e:
+        logfile("Main error " + e  )
+    
 
 if __name__ == "__main__":
     main()
