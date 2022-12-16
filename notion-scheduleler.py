@@ -123,7 +123,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
             print ("Error: " + response.text )
             return False
 
-        Comment = 'Updated >' + title + '< repeat date [' + repeat + '] from::' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
+        Comment = title + ' Updated -: repeat date [' + repeat + '] from::' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
 
         updateComment = ' {"parent": { '
         updateComment += ' "page_id": "' + id + '" '
