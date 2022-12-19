@@ -27,6 +27,7 @@ NotionHeader = { 'Authorization': 'Bearer ' + str(os.getenv('NOTION_TOKEN')) ,
                 }
 
 actions_database_id = "cbf1a5a1dae148dbabac74a98f5534c0"
+heartbeat_database_id = "6a6b13d5d7ae49daa0b8bb4a54e5af18"
 NotionAPIDatabases =  'https://api.notion.com/v1/databases/'
 NotionAPIPages = 'https://api.notion.com/v1/pages/'
 NotionAPICommnets = 'https://api.notion.com/v1/comments/'
@@ -92,7 +93,6 @@ def ReadRepeatfromNotionAction():
 
                 else:
                     logfile('do nothing :' + title) 
-                    #print('do nothing :' + title) 
             #else:
             #    logfile("Empty record ")
             
@@ -119,7 +119,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         response = requests.request("PATCH", NotionAPIPages + id, headers=NotionHeader, data=updateData)
 
         if response.status_code != 200:
-            print ("Error: " + response.text )
+            logfile("Error: " + response.text )
             return False
 
         Comment = title + ' Updated -: repeat date [' + repeat + '] from:' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
@@ -147,23 +147,19 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         logfile("Error: UpdateAction" )
         return False
     
-def updatelog(log):
+def updateheartbeat(log):
     try:
-        updateData = ' { "properties":  '
-        updateData += ' { '
-        updateData += '     "Done": {'
-        updateData += '            "checkbox": false '
-        updateData += '              }, '
-        updateData += '       "Do Date": { '
-        updateData += '         "date": { '
-        #updateData += '                 "start": "' + Action_Date_str + '" '
-        updateData += '                  } ' 
-        updateData += '                } '
-        updateData += ' } }'
-
-        #response = requests.request("PATCH", NotionAPIPages + id, headers=NotionHeader, data=updateData)
-    
-        return True
+        updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
+        updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "Heartbeat" } } ] } '
+        updateData += '  } }'
+        response = requests.post( NotionAPIPages , headers=NotionHeader, data=updateData)
+        if response.status_code == 200: 
+            #print(response.text)
+            return True
+        else:
+            #print(response.text)
+            return False
+        
     except:  
         return False
 
@@ -173,6 +169,7 @@ def main():
     try: 
         if str(os.getenv('NOTION_TOKEN')) != 'None':
             logfile("NOTION_TOKEN = found " )
+            updateheartbeat("Text")
             ReadRepeatfromNotionAction()
         else:
             logfile("Error: NOTION_TOKEN missing " )
