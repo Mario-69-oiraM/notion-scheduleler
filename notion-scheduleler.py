@@ -11,28 +11,9 @@ from datetime import date
 import os
 import json
 import configparser
+import config
 import string
 import datetime
-
-#config stuff 
-Weekly = 'Weekly'
-Every_work_day = 'Every work day'
-Bi_weekly = "Bi-weekly"
-
-NotionHeader = {}
-
-NotionHeader = { 'Authorization': 'Bearer ' + str(os.getenv('NOTION_TOKEN')) ,
-                'Content-Type': 'application/json',
-                'Notion-Version': '2022-06-28'
-                }
-
-actions_database_id = "cbf1a5a1dae148dbabac74a98f5534c0"
-heartbeat_database_id = "6a6b13d5d7ae49daa0b8bb4a54e5af18"
-NotionAPIDatabases =  'https://api.notion.com/v1/databases/'
-NotionAPIPages = 'https://api.notion.com/v1/pages/'
-NotionAPICommnets = 'https://api.notion.com/v1/comments/'
-
-# end config stuff 
 
 def SaveResult(Json_text):
     with open('.db2.json','w',encoding='utf8') as f:
@@ -41,7 +22,7 @@ def SaveResult(Json_text):
 
 def logfile(log):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    f = open("schedulelerlog.txt", "a")
+    f = open(config.logfile, "a")
     f.writelines(ts + ' | ' + log +'\n')
     f.close()
     return True 
@@ -54,12 +35,12 @@ def ReadRepeatfromNotionAction():
     weeknumber = (today.isocalendar()[1] + 1 )
 
     data = ' {"filter": { "or": [ '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + Weekly + '" } }, '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + Every_work_day + '" } }, '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + Bi_weekly + '" } }'
+    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Weekly + '" } }, '
+    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Every_work_day + '" } }, '
+    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Bi_weekly + '" } }'
     data +=  ' ] } } '
 
-    response = requests.post(NotionAPIDatabases + actions_database_id + '/query', headers=NotionHeader, data=data)
+    response = requests.post(config.NotionAPIDatabases + config.actions_database_id + '/query', headers=config.NotionHeader, data=data)
     
     logfile('Notion Connection ' + str(response.status_code))
     logfile('##########################################################')
@@ -77,15 +58,15 @@ def ReadRepeatfromNotionAction():
                 FromDate = dodate
                 weeknumber_doDate = dodate.isocalendar()[1] + 1
                 
-                if done == True and repeat == Weekly: #and weeknumber > weeknumber_doDate:
+                if done == True and repeat == config.Weekly: #and weeknumber > weeknumber_doDate:
                     dodate = dodate + datetime.timedelta(days=7)
                     UpdateAction(id, FromDate, dodate, title, repeat)
 
-                if done == True and repeat == Bi_weekly: # and (weeknumber - 1) > (weeknumber_doDate) 
+                if done == True and repeat == config.Bi_weekly: # and (weeknumber - 1) > (weeknumber_doDate) 
                     dodate = dodate + datetime.timedelta(days=14)
                     UpdateAction(id, FromDate, dodate, title, repeat)
 
-                elif done == True and repeat == Every_work_day: #and dodate < today 
+                elif done == True and repeat == config.Every_work_day: #and dodate < today 
                     dodate = dodate + datetime.timedelta(days=1)
                     while dodate.isoweekday() >= 6:
                         dodate = dodate + datetime.timedelta(days=1)
@@ -116,7 +97,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         updateData += '                } '
         updateData += ' } }'
 
-        response = requests.request("PATCH", NotionAPIPages + id, headers=NotionHeader, data=updateData)
+        response = requests.request("PATCH", config.NotionAPIPages + id, headers=config.NotionHeader, data=updateData)
 
         if response.status_code != 200:
             logfile("Error: " + response.text )
@@ -135,7 +116,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         updateComment += ' } '
         updateComment += ' ] }'
         
-        response = requests.request("POST", NotionAPICommnets, headers=NotionHeader, data=updateComment)
+        response = requests.request("POST", config.NotionAPICommnets, headers=config.NotionHeader, data=updateComment)
 
         if response.status_code == 200:
             logfile(Comment)
@@ -152,7 +133,7 @@ def updateheartbeat(log):
         updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
         updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "Heartbeat" } } ] } '
         updateData += '  } }'
-        response = requests.post( NotionAPIPages , headers=NotionHeader, data=updateData)
+        response = requests.post(config.NotionAPIPages , headers=config.NotionHeader, data=updateData)
         if response.status_code == 200: 
             return True
         else:
@@ -160,19 +141,17 @@ def updateheartbeat(log):
     except:  
         return False
 
-            
-
 def main():
     try: 
         if str(os.getenv('NOTION_TOKEN')) != 'None':
             logfile("NOTION_TOKEN = found " )
             updateheartbeat("Text")
             ReadRepeatfromNotionAction()
+            #print(open(config.logfile, "r").readlines)
         else:
             logfile("Error: NOTION_TOKEN missing " )
     except Exception as e:
         logfile("Main error " + e  )
     
-
 if __name__ == "__main__":
     main()
