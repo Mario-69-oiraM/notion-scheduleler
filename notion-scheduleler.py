@@ -154,12 +154,9 @@ def updateheartbeat(log):
         updateData += '  } }'
         response = requests.post( NotionAPIPages , headers=NotionHeader, data=updateData)
         if response.status_code == 200: 
-            #print(response.text)
             return True
         else:
-            #print(response.text)
             return False
-        
     except:  
         return False
 
