@@ -131,7 +131,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
 def updateheartbeat(log):
     try:
         updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
-        updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "Heartbeat" } } ] } '
+        updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "' + log + '" } } ] } '
         updateData += '  } }'
         response = requests.post(config.NotionAPIPages , headers=config.NotionHeader, data=updateData)
         if response.status_code == 200: 
@@ -144,8 +144,8 @@ def updateheartbeat(log):
 def main():
     try: 
         if str(os.getenv('NOTION_TOKEN')) != 'None':
-            logfile("NOTION_TOKEN = found " )
-            updateheartbeat("Text")
+            logfile("NOTION_TOKEN = not found" )
+            updateheartbeat("Heartbeat - Action schedule")
             ReadRepeatfromNotionAction()
             #print(open(config.logfile, "r").readlines)
         else:
