@@ -2,6 +2,7 @@
 ## scheduleler
 ##
 ##  export NOTION_TOKEN=
+##  export NOTION_TOKEN_heartbeat=
 
 from json import decoder
 import requests 
@@ -133,7 +134,7 @@ def updateheartbeat(log):
         updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
         updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "' + log + '" } } ] } '
         updateData += '  } }'
-        response = requests.post(config.NotionAPIPages , headers=config.NotionHeader, data=updateData)
+        response = requests.post(config.NotionAPIPages , headers=config.NotionHeader_heartbeat, data=updateData)
         if response.status_code == 200: 
             return True
         else:
@@ -147,7 +148,6 @@ def main():
             logfile("NOTION_TOKEN = not found" )
             updateheartbeat("Heartbeat - Action schedule")
             ReadRepeatfromNotionAction()
-            #print(open(config.logfile, "r").readlines)
         else:
             logfile("Error: NOTION_TOKEN missing " )
     except Exception as e:

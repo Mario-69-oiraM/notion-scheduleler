@@ -22,6 +22,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ARG NOTION_TOKEN
 ENV NOTION_TOKEN ${NOTION_TOKEN}
+ENV NOTION_TOKEN_heartbeat ${NOTION_TOKEN_heartbeat}
 
 # Give execution rights on the cron scripts
 RUN chmod +x /app/runSchedule.sh

@@ -1,0 +1,69 @@
+2022-12-27 09:48:14 | NOTION_TOKEN = not found
+2022-12-27 09:48:15 | Notion Connection 200
+2022-12-27 09:48:15 | ##########################################################
+2022-12-27 09:48:15 | do nothing :Brain dump doc
+2022-12-27 09:48:15 | do nothing :Patching 
+2022-12-27 09:48:15 | do nothing :Standup Notes and Actions 
+2022-12-27 09:48:15 | do nothing :Update Caleb notes 
+2022-12-27 09:48:15 | do nothing :Nate Campbell
+2022-12-27 09:48:15 | do nothing :Review Tickets tt
+2022-12-27 09:48:15 | do nothing :Account Baselining 
+2022-12-27 09:48:15 | do nothing :Ian [Weekly]
+2022-12-27 09:48:15 | do nothing :Policy Engine 
+2022-12-27 09:48:15 | do nothing :Cost Savings 
+2022-12-27 09:48:15 | do nothing :Mark [Weekly] 
+2022-12-27 09:48:15 | do nothing :Testing Action
+2022-12-27 09:48:15 | do nothing :Caleb [ Weekly]
+2022-12-27 09:48:15 | do nothing :Shayesta
+2022-12-27 09:48:15 | do nothing :Joe [Weekly]
+2022-12-27 09:48:15 | do nothing :Iancott Weekly Staff Meeting [Weekly]
+2022-12-27 09:48:15 | do nothing :Sanjit [Weekly]
+2022-12-27 09:48:15 | do nothing :Weekly Ops Handover
+2022-12-27 09:48:15 | do nothing :Saransh [Weekly]
+2022-12-27 09:48:15 | do nothing :Babacar [Weekly]
+2022-12-27 09:48:15 | do nothing :Bradley [Weekly]
+2022-12-27 09:48:15 | do nothing :Jacob [Weekly]
+2022-12-27 09:48:15 | do nothing :OHM WBR [Weekly]
+2022-12-27 09:48:15 | do nothing :Kurian [Weekly]
+2022-12-27 09:48:15 | do nothing :Follow up PIMMS meeting with Kurian 
+2022-12-27 09:48:15 | do nothing :New Amazon Day 1 Manager Onboarding
+2022-12-27 09:48:15 | do nothing :Update Will
+2022-12-27 09:48:15 | do nothing :Look at my priorities!
+2022-12-27 09:48:15 | do nothing :Build Rancher
+2022-12-27 09:48:15 | do nothing :Have Grandfather clock seen to 
+2022-12-27 09:48:15 | do nothing :End of the week review 
+2022-12-27 09:48:29 | NOTION_TOKEN = not found
+2022-12-27 09:48:49 | NOTION_TOKEN = not found
+2022-12-27 09:48:56 | Notion Connection 200
+2022-12-27 09:48:56 | ##########################################################
+2022-12-27 09:48:57 | do nothing :Brain dump doc
+2022-12-27 09:48:57 | do nothing :Patching 
+2022-12-27 09:48:57 | do nothing :Standup Notes and Actions 
+2022-12-27 09:48:57 | do nothing :Update Caleb notes 
+2022-12-27 09:48:57 | do nothing :Nate Campbell
+2022-12-27 09:48:57 | do nothing :Review Tickets tt
+2022-12-27 09:48:57 | do nothing :Account Baselining 
+2022-12-27 09:48:57 | do nothing :Ian [Weekly]
+2022-12-27 09:48:57 | do nothing :Policy Engine 
+2022-12-27 09:48:57 | do nothing :Cost Savings 
+2022-12-27 09:48:57 | do nothing :Mark [Weekly] 
+2022-12-27 09:48:57 | do nothing :Testing Action
+2022-12-27 09:48:57 | do nothing :Caleb [ Weekly]
+2022-12-27 09:48:57 | do nothing :Shayesta
+2022-12-27 09:48:57 | do nothing :Joe [Weekly]
+2022-12-27 09:48:57 | do nothing :Iancott Weekly Staff Meeting [Weekly]
+2022-12-27 09:48:57 | do nothing :Sanjit [Weekly]
+2022-12-27 09:48:57 | do nothing :Weekly Ops Handover
+2022-12-27 09:48:57 | do nothing :Saransh [Weekly]
+2022-12-27 09:48:57 | do nothing :Babacar [Weekly]
+2022-12-27 09:48:57 | do nothing :Bradley [Weekly]
+2022-12-27 09:48:57 | do nothing :Jacob [Weekly]
+2022-12-27 09:48:57 | do nothing :OHM WBR [Weekly]
+2022-12-27 09:48:57 | do nothing :Kurian [Weekly]
+2022-12-27 09:48:57 | do nothing :Follow up PIMMS meeting with Kurian 
+2022-12-27 09:48:57 | do nothing :New Amazon Day 1 Manager Onboarding
+2022-12-27 09:48:57 | do nothing :Update Will
+2022-12-27 09:48:57 | do nothing :Look at my priorities!
+2022-12-27 09:48:57 | do nothing :Build Rancher
+2022-12-27 09:48:57 | do nothing :Have Grandfather clock seen to 
+2022-12-27 09:48:57 | do nothing :End of the week review 
