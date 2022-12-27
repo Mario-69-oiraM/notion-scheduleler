@@ -144,12 +144,12 @@ def updateheartbeat(log):
 
 def main():
     try: 
-        if str(os.getenv('NOTION_TOKEN')) != 'None':
+        if (str(os.getenv('NOTION_TOKEN')) != 'None') and (str(os.getenv('NOTION_TOKEN_heartbeat')) != 'None'):
             logfile("NOTION_TOKEN = not found" )
             updateheartbeat("Heartbeat - Action schedule")
             ReadRepeatfromNotionAction()
         else:
-            logfile("Error: NOTION_TOKEN missing " )
+            logfile("Error: NOTION_TOKEN of NOTION_TOKEN_heartbeat missing! " )
     except Exception as e:
         logfile("Main error " + e  )
     
