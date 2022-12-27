@@ -7,14 +7,13 @@ Bi_weekly = "Bi-weekly"
 
 logfile = 'schedulelerlog.txt'
 
-    
 NotionHeader = {}
 
 NotionHeader = { 'Authorization': 'Bearer ' + str(os.getenv('NOTION_TOKEN')) ,
                 'Content-Type': 'application/json',
                 'Notion-Version': '2022-06-28'
                 }
-                
+
 NotionHeader_heartbeat = { 'Authorization': 'Bearer ' + str(os.getenv('NOTION_TOKEN_heartbeat')) ,
                 'Content-Type': 'application/json',
                 'Notion-Version': '2022-06-28'
