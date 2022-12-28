@@ -3,6 +3,7 @@
 ##
 ##  export NOTION_TOKEN=
 ##  export NOTION_TOKEN_heartbeat=
+##  export NOTION_TOKEN_reports= 
 
 from json import decoder
 import requests 
@@ -15,142 +16,134 @@ import configparser
 import config
 import string
 import datetime
-from helper import updateheartbeat
-
-def SaveResult(Json_text):
-    with open('.db2.json','w',encoding='utf8') as f:
-            json.dump(Json_text,f,ensure_ascii=False)  
-    return True
-
-def logfile(log):
-    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    f = open(config.logfile, "a")
-    f.writelines(ts + ' | ' + log +'\n')
-    f.close()
-    return True 
+from helper import updateheartbeat ,SaveResult, logfile
 
 
-def ReadRepeatfromNotionAction():
-    
-    today = date.today()
-    FromDate = date.today()
-    weeknumber = (today.isocalendar()[1] + 1 )
+def ReadActions():
+    #read report table 
+    # Start Date
+    # End Date
+    # Ready
 
     data = ' {"filter": { "or": [ '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Weekly + '" } }, '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Every_work_day + '" } }, '
-    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Bi_weekly + '" } }'
+    data +=  ' { "property": "Ready", "checkbox" : {"equals": false } } '
     data +=  ' ] } } '
-
-    response = requests.post(config.NotionAPIDatabases + config.actions_database_id + '/query', headers=config.NotionHeader, data=data)
+    #SaveResult(data)
+    response = requests.post(config.NotionAPIDatabases + config.reports_database_id + '/query', headers=config.NotionHeader(config.tokenActions), data=data)
     
-    logfile('Notion Connection ' + str(response.status_code))
-    logfile('##########################################################')
-
     if response.status_code == 200: 
         data_dict = json.loads(response.text)
         if bool(data_dict["results"]):
-            for OneItem in data_dict["results"]:
-                SaveResult(OneItem)
-                id = OneItem["id"]
-                title = OneItem["properties"]["Name"]["title"][0]["text"]["content"]
-                repeat = OneItem["properties"]["Repeat"]["select"]["name"]
-                done = OneItem["properties"]["Done"]["checkbox"]
-                dodate = datetime.datetime.strptime(OneItem["properties"]["Do Date"]["date"]["start"],'%Y-%m-%d').date()
-                FromDate = dodate
-                weeknumber_doDate = dodate.isocalendar()[1] + 1
-                
-                if done == True and repeat == config.Weekly: #and weeknumber > weeknumber_doDate:
-                    dodate = dodate + datetime.timedelta(days=7)
-                    UpdateAction(id, FromDate, dodate, title, repeat)
-
-                if done == True and repeat == config.Bi_weekly: # and (weeknumber - 1) > (weeknumber_doDate) 
-                    dodate = dodate + datetime.timedelta(days=14)
-                    UpdateAction(id, FromDate, dodate, title, repeat)
-
-                elif done == True and repeat == config.Every_work_day: #and dodate < today 
-                    dodate = dodate + datetime.timedelta(days=1)
-                    while dodate.isoweekday() >= 6:
-                        dodate = dodate + datetime.timedelta(days=1)
-                    UpdateAction(id, FromDate, dodate, title, repeat)
+            #SaveResult(data_dict)
+            for ReportItem in data_dict["results"]:
+                SaveResult(ReportItem)
+                ReportItem_id = ReportItem["id"]
+                startDate = ReportItem["properties"]["Start Date"]["date"]["start"]
+                endDate = ReportItem["properties"]["End Date"]["date"]["start"]
+                GetPage(ReportItem_id)
+                data = ' {"filter": { "and": [ '
+                data +=  ' { "property": "Do Date", "date" : {"on_or_after": "' + startDate + '" } }, '
+                data +=  ' { "property": "Do Date", "date" : {"on_or_before": "' + endDate + '" } } '
+                data +=  ' ] } } '
+                #SaveResult(data)
+                # people - 939aa24f98a5445cb4dfd8c49e8264b2
+                ActionResponse = requests.post(config.NotionAPIDatabases + config.actions_database_id + '/query', headers=config.NotionHeader(config.tokenActions), data=data)
+                if ActionResponse.status_code == 200: 
+                    Action_data_dict = json.loads(ActionResponse.text)
+                    #SaveResult(Action_data_dict)
+                    for Action_Item in Action_data_dict["results"]:                        
+                        People = []
+                        #SaveResult(OneItem["properties"]["People"]["relation"])
+                        Action_Item_pageURL = Action_Item["url"]
+                        Action_Item_ID = Action_Item["id"]
+                        for Person in Action_Item["properties"]["People"]["relation"]:
+                            People.append(Person)
+                            #response = requests.request("GET", config.NotionAPIPages + Person, headers=config.NotionHeader(config.tokenActions))
+                        
+                        UpdateReport(ReportItem_id, startDate ,endDate, Action_Item_pageURL,Action_Item_ID)
 
                 else:
-                    logfile('do nothing :' + title) 
-            #else:
-            #    logfile("Empty record ")
-            
+                    SaveResult(ActionResponse.text)
     else:
-        logfile("Error: " + str(response.status_code) + " | " + response.text)
-        return False    
+        SaveResult(response.text)
+
+        
     return True
 
-def UpdateAction(id, FromDate, Action_Date, title, repeat):
-    Action_Date_str = Action_Date.strftime('%Y-%m-%d')
+def GetPage(pageid):
+    
+    response = requests.request("GET", config.NotionAPIPages + pageid, headers=config.NotionHeader(config.tokenActions))
+    data_dict = json.loads(response.text)
+    SaveResult(data_dict)
+
+def UpdateReport(id, StartDate, EndDate, Action_Item_pageURL, Action_Item_ID):
+    Title = 'Activity from ' + StartDate + ' to ' + EndDate
     try:
         updateData = ' { "properties":  '
         updateData += ' { '
-        updateData += '     "Done": {'
-        updateData += '            "checkbox": false '
-        updateData += '              }, '
-        updateData += '       "Do Date": { '
-        updateData += '         "date": { '
-        updateData += '                 "start": "' + Action_Date_str + '" '
-        updateData += '                  } ' 
-        updateData += '                } '
+        updateData += '     "Name": {'
+        updateData += '            "title": [ { "text": { "content": "' + Title + '"} }  ]'
+        updateData += '              } '
         updateData += ' } }'
-
-        response = requests.request("PATCH", config.NotionAPIPages + id, headers=config.NotionHeader, data=updateData)
+        
+        response = requests.request("PATCH", config.NotionAPIPages + id, headers=config.NotionHeader(config.tokenActions), data=updateData)
 
         if response.status_code != 200:
             logfile("Error: " + response.text )
             return False
-
-        Comment = title + ' Updated -: repeat date [' + repeat + '] from:' + FromDate.strftime('%Y-%m-%d') + ' to:' + Action_Date.strftime('%Y-%m-%d') 
-
-        updateComment = ' {"parent": { '
-        updateComment += ' "page_id": "' + id + '" '
-        updateComment += ' }, '
-        updateComment += '  "rich_text": [ '
-        updateComment += ' { '
-        updateComment += ' "text": { '
-        updateComment += ' "content": "' + Comment + '" '
-        updateComment += ' } '
-        updateComment += ' } '
-        updateComment += ' ] }'
         
-        response = requests.request("POST", config.NotionAPICommnets, headers=config.NotionHeader, data=updateComment)
+        # updateData =  ' { "children": [ ' 
+        # updateData += ' { "object": "block", '
+        # updateData += '   "type": "paragraph", "paragraph": { '
+        # updateData += '   "rich_text": [ { "type": "text", '
+        # updateData += '   "text": { "content": "' + bodyData + '", "link": null  }, '
+        # updateData += '   } ] } } ] }'
+        
+        # updateData =  ' { "children": [ ' 
+        # updateData += ' { "object": "block", '
+        # updateData += '   "type": "embed", '
+        # updateData += '   "embed": { "url": "' + bodyData + '" } '
+        # updateData += '    } ] } '
 
-        if response.status_code == 200:
-            logfile(Comment)
-            return True
-        else:
-            logfile("Error: " + response.text)
-            return False
+        # updateData =  ' { "children": [ ' 
+        # updateData += ' { "object": "block", '
+        # updateData += '   "type": "bookmark", '
+        # updateData += '   "bookmark": { "url": "' + Action_Item_pageURL + '" } '
+        # updateData += '    } ] } '
+
+        # updateData =  ' { "children": [  ' 
+        # updateData += ' { "object": "block", '
+        # updateData += ' "type": "link_to_page", '
+        # updateData += ' "link_to_page": { '
+        # updateData += ' "type": "page_id",' 
+        # updateData += ' "page_id": "{0}"'.format(Action_Item_ID) 
+        # updateData += ' } } ] }'
+
+        updateData =  ' { "children": [ { ' 
+        updateData += ' "type": "link_to_page", '
+        updateData += ' "link_to_page": { '
+        updateData += ' "type": "page_id",' 
+        updateData += ' "page_id": "{0}"'.format(Action_Item_ID) 
+        updateData += ' } } ] }'
+
+        SaveResult(updateData)
+        response = requests.request("PATCH",config.NotionAPIBlocks.format(id), headers=config.NotionHeader(config.tokenActions), data=updateData)
+        
+        data_dict = json.loads(response.text)
+        SaveResult(data_dict)
+
     except: 
         logfile("Error: UpdateAction" )
         return False
     
-# def updateheartbeat(log):
-#     try:
-#         updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
-#         updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "' + log + '" } } ] } '
-#         updateData += '  } }'
-#         response = requests.post(config.NotionAPIPages , headers=config.NotionHeader_heartbeat, data=updateData)
-#         if response.status_code == 200: 
-#             return True
-#         else:
-#             return False
-#     except:  
-#         return False
-
 def main():
     try: 
-        if (str(os.getenv('NOTION_TOKEN')) != 'None') and (str(os.getenv('NOTION_TOKEN_heartbeat')) != 'None'):
-            logfile("NOTION_TOKEN = not found" )
-            updateheartbeat("Heartbeat - Action schedule")
-            ReadRepeatfromNotionAction()
+        if (str(os.getenv(config.tokenActions)) != 'None') and (str(os.getenv(config.tokenHeartbeat)) != 'None'):
+            #updateheartbeat("Heartbeat - Reports schedule")
+            ReadActions()
+            #ReadRepeatfromNotionAction()
         else:
-            logfile("Error: NOTION_TOKEN of NOTION_TOKEN_heartbeat missing! " )
+            logfile("Error: NOTION_TOKEN missing! " )
     except Exception as e:
         logfile("Main error " + e  )
     
