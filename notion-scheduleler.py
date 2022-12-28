@@ -15,19 +15,7 @@ import configparser
 import config
 import string
 import datetime
-from helper import updateheartbeat
-
-def SaveResult(Json_text):
-    with open('.db2.json','w',encoding='utf8') as f:
-            json.dump(Json_text,f,ensure_ascii=False)  
-    return True
-
-def logfile(log):
-    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    f = open(config.logfile, "a")
-    f.writelines(ts + ' | ' + log +'\n')
-    f.close()
-    return True 
+from helper import updateheartbeat ,SaveResult, logfile
 
 
 def ReadRepeatfromNotionAction():
@@ -42,7 +30,7 @@ def ReadRepeatfromNotionAction():
     data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Bi_weekly + '" } }'
     data +=  ' ] } } '
 
-    response = requests.post(config.NotionAPIDatabases + config.actions_database_id + '/query', headers=config.NotionHeader, data=data)
+    response = requests.post(config.NotionAPIDatabases + config.actions_database_id + '/query', headers=config.NotionHeader(config.tokenActions), data=data)
     
     logfile('Notion Connection ' + str(response.status_code))
     logfile('##########################################################')
@@ -99,7 +87,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         updateData += '                } '
         updateData += ' } }'
 
-        response = requests.request("PATCH", config.NotionAPIPages + id, headers=config.NotionHeader, data=updateData)
+        response = requests.request("PATCH", config.NotionAPIPages + id, headers=config.NotionHeader(config.tokenActions), data=updateData)
 
         if response.status_code != 200:
             logfile("Error: " + response.text )
@@ -118,7 +106,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         updateComment += ' } '
         updateComment += ' ] }'
         
-        response = requests.request("POST", config.NotionAPICommnets, headers=config.NotionHeader, data=updateComment)
+        response = requests.request("POST", config.NotionAPICommnets, headers=config.NotionHeader(config.tokenActions), data=updateComment)
 
         if response.status_code == 200:
             logfile(Comment)
@@ -130,23 +118,10 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
         logfile("Error: UpdateAction" )
         return False
     
-# def updateheartbeat(log):
-#     try:
-#         updateData = '{ "parent": { "database_id": "6a6b13d5d7ae49daa0b8bb4a54e5af18" }, '
-#         updateData += ' "properties": { "Text": { "title": [ { "text": { "content": "' + log + '" } } ] } '
-#         updateData += '  } }'
-#         response = requests.post(config.NotionAPIPages , headers=config.NotionHeader_heartbeat, data=updateData)
-#         if response.status_code == 200: 
-#             return True
-#         else:
-#             return False
-#     except:  
-#         return False
 
 def main():
     try: 
-        if (str(os.getenv('NOTION_TOKEN')) != 'None') and (str(os.getenv('NOTION_TOKEN_heartbeat')) != 'None'):
-            logfile("NOTION_TOKEN = not found" )
+        if (str(os.getenv(config.tokenActions)) != 'None') and (str(os.getenv(config.tokenHeartbeat)) != 'None'):
             updateheartbeat("Heartbeat - Action schedule")
             ReadRepeatfromNotionAction()
         else:
