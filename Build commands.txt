@@ -9,3 +9,9 @@ git clone https://github.com/Mario-69-Mario/notion-scheduleler
 
 python Notion-scheduleler.py
 
+  updData =  ' { "children": [ ' 
+            updData += ' { "object": "block", '
+            updData += '   "type": "paragraph", "paragraph": { '
+            updData += '   "text": [ { "type": "text", '
+            updData += '   "text": { "content": "' + str(b) + '" } '
+            updData += '   } ] } } ] }'
