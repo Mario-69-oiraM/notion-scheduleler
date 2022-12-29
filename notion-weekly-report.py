@@ -40,7 +40,7 @@ def ReadActions():
                 ReportItem_id = ReportItem["id"]
                 startDate = ReportItem["properties"]["Start Date"]["date"]["start"]
                 endDate = ReportItem["properties"]["End Date"]["date"]["start"]
-                GetPage(ReportItem_id)
+                #GetPage(ReportItem_id)
                 data = ' {"filter": { "and": [ '
                 data +=  ' { "property": "Do Date", "date" : {"on_or_after": "' + startDate + '" } }, '
                 data +=  ' { "property": "Do Date", "date" : {"on_or_before": "' + endDate + '" } } '
@@ -96,7 +96,7 @@ def UpdateReport(id, StartDate, EndDate, Action_Item_pageURL, Action_Item_ID):
         # updateData += ' { "object": "block", '
         # updateData += '   "type": "paragraph", "paragraph": { '
         # updateData += '   "rich_text": [ { "type": "text", '
-        # updateData += '   "text": { "content": "' + bodyData + '", "link": null  }, '
+        # updateData += '   "text": { "content": "' + Action_Item_pageURL + '", "link": null  } '
         # updateData += '   } ] } } ] }'
         
         # updateData =  ' { "children": [ ' 
@@ -111,15 +111,15 @@ def UpdateReport(id, StartDate, EndDate, Action_Item_pageURL, Action_Item_ID):
         # updateData += '   "bookmark": { "url": "' + Action_Item_pageURL + '" } '
         # updateData += '    } ] } '
 
-        # updateData =  ' { "children": [  ' 
-        # updateData += ' { "object": "block", '
+        # updateData =  ' { "children": [ { ' 
         # updateData += ' "type": "link_to_page", '
         # updateData += ' "link_to_page": { '
         # updateData += ' "type": "page_id",' 
         # updateData += ' "page_id": "{0}"'.format(Action_Item_ID) 
         # updateData += ' } } ] }'
 
-        updateData =  ' { "children": [ { ' 
+        updateData =  ' { "children": [  ' 
+        updateData += ' { "object": "block", '
         updateData += ' "type": "link_to_page", '
         updateData += ' "link_to_page": { '
         updateData += ' "type": "page_id",' 
