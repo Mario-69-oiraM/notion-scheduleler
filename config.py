@@ -6,7 +6,7 @@ Weekly = 'Weekly'
 Every_work_day = 'Every work day'
 Bi_weekly = "Bi-weekly"
 
-logfile = 'schedulelerlog.txt'
+logfile = 'scheduleler.log'
 tokenHeartbeat = 'NOTION_TOKEN_heartbeat'
 tokenActions = 'NOTION_TOKEN'
 #tokenReports = 'NOTION_TOKEN_reports'
