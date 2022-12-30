@@ -5,19 +5,24 @@ import json
 from datetime import datetime
 from datetime import date
 import datetime
+import logging
 
+level=logging.DEBUG
 
 def SaveResult(Json_text):
     with open('.db2.json','w',encoding='utf8') as f:
             json.dump(Json_text,f,ensure_ascii=False)  
     return True
 
-def logfile(log):
-    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    f = open(config.logfile, "a")
-    f.writelines(ts + ' | ' + log +'\n')
-    f.close()
-    return True 
+
+def logfile(log :str):
+    try:
+        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(config.logfile, "a") as f: 
+            f.writelines(log)
+        return True 
+    except ValueError as e:
+        print(e)
 
 def updateheartbeat(log):
     #try:

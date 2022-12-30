@@ -3,10 +3,11 @@
 ##
 ##  export NOTION_TOKEN=
 ##  export NOTION_TOKEN_heartbeat=
-##  export NOTION_TOKEN_reports= 
+##  export e= 
 
 from json import decoder
 import requests 
+import logging
 import re 
 from datetime import datetime
 from datetime import date
@@ -17,14 +18,16 @@ import config
 import string
 import datetime
 from helper import updateheartbeat, SaveResult, logfile
-
 from notionHelper import GetDatabaseQuery, UpdatePageTitle,AppendLinktoPage
+
+level =logging.DEBUG
 
 def ReadActions():
     #read report table 
     # Start Date
     # End Date
     # Ready
+    logfile('readActions')
     filter = ' {"filter": { "or": [ '
     filter += '{ "property": "Ready", "checkbox" : {"equals": false } }'
     filter +=  ' ] } } '
@@ -55,19 +58,22 @@ def ReadActions():
                 #SaveResult(Action_data_dict)
                 for Action_Item in Action_data_dict["results"]:                        
                     People = []
-                    #SaveResult(OneItem["properties"]["People"]["relation"])
                     Action_Item_pageURL = Action_Item["url"]
                     Action_Item_ID = Action_Item["id"]
-                    for Person in Action_Item["properties"]["People"]["relation"]:
-                        People.append(Person)
+                    
+                    #for Person in Action_Item["properties"]["People"]["relation"]:
+                    #    People.append(Person)
                         #response = requests.request("GET", config.NotionAPIPages + Person, headers=config.NotionHeader(config.tokenActions))
                     AppendLinktoPage(ReportItem_id,Action_Item_ID)
+                    SaveResult(Action_Item["properties"]["Notes"]["relation"])
+                    for Note_id in Action_Item["properties"]["Notes"]["relation"]:
+                        AppendLinktoPage(ReportItem_id,Note_id["id"])
+
                     #todo add notes to the page body 
                     #filter = ' {"filter": { "or": [ '
                     #filter += '{ "property": "Ready", "checkbox" : {"equals": false } }'
                     #filter +=  ' ] } } '
                     #data_dict = GetDatabaseQuery(config.reports_database_id, filter)
-
 
             else:
                 SaveResult(ActionResponse.text)
@@ -147,7 +153,7 @@ def main():
         else:
             logfile("Error: NOTION_TOKEN missing! " )
     except Exception as e:
-        logfile("Main error " + e  )
+        logfile("Main error {0}".format(e)  )
     
 if __name__ == "__main__":
     main()
