@@ -18,7 +18,7 @@ import config
 import string
 import datetime
 from helper import updateheartbeat, SaveResult, logfile
-from notionHelper import GetDatabaseQuery, UpdatePageTitle,AppendLinktoPage
+from notionHelper import GetDatabaseQuery, UpdatePageTitle,AppendLinktoPage, IsNoteinRange
 
 level =logging.DEBUG
 
@@ -65,9 +65,10 @@ def ReadActions():
                     #    People.append(Person)
                         #response = requests.request("GET", config.NotionAPIPages + Person, headers=config.NotionHeader(config.tokenActions))
                     AppendLinktoPage(ReportItem_id,Action_Item_ID)
-                    SaveResult(Action_Item["properties"]["Notes"]["relation"])
+                    #SaveResult(Action_Item["properties"]["Notes"]["relation"])
                     for Note_id in Action_Item["properties"]["Notes"]["relation"]:
-                        AppendLinktoPage(ReportItem_id,Note_id["id"])
+                        if IsNoteinRange(Note_id["id"], startDate, endDate) :
+                            AppendLinktoPage(ReportItem_id,Note_id["id"])
 
                     #todo add notes to the page body 
                     #filter = ' {"filter": { "or": [ '

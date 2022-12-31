@@ -7,7 +7,20 @@ from datetime import date
 import datetime
 import logging
 
-level=logging.DEBUG
+
+# Gets or creates a logger
+logger = logging.getLogger(__name__)  
+
+# set log level
+logger.setLevel(logging.DEBUG)
+
+# define file handler and set formatter
+file_handler = logging.FileHandler('logfile.log')
+formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+file_handler.setFormatter(formatter)
+
+# add file handler to logger
+logger.addHandler(file_handler)
 
 def SaveResult(Json_text):
     with open('.db2.json','w',encoding='utf8') as f:
@@ -17,9 +30,10 @@ def SaveResult(Json_text):
 
 def logfile(log :str):
     try:
+        print(log)
         ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(config.logfile, "a") as f: 
-            f.writelines(log)
+            f.writelines(ts + ' : ' + log + '\n')
         return True 
     except ValueError as e:
         print(e)
@@ -36,3 +50,9 @@ def updateheartbeat(log):
         return False
     #except:  
     #    return False
+    
+    
+    
+    ###### 
+    
+

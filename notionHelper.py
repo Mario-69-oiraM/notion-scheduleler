@@ -2,15 +2,26 @@ import requests
 import json
 import config
 from helper import SaveResult, logfile
+import datetime
 
-def GetPage(pageid,token=config.tokenActions):
+def IsNoteinRange(pageid, startDate, endDate):
     try:
-        response = requests.request("GET", config.NotionAPIPages + pageid, headers=config.NotionHeader(token))
+        response = requests.get(config.NotionAPIPages + pageid, headers=config.NotionHeader(config.tokenActions))
         data_dict = json.loads(response.text)
-        SaveResult(data_dict)
-        return data_dict["results"]
-    except: 
-        logfile("Error: UpdateAction" )
+        #dodate = datetime.datetime.strptime(OneItem["properties"]["Do Date"]["date"]["start"],'%Y-%m-%d').date()
+        
+        noteDate = data_dict["properties"]["Updated Date"]["formula"]["date"]["start"]
+
+        #noteDate = datetime.datetime.strptime(noteDate,'%Y-%m-%d')
+        noteDate_str = noteDate.strftime('%Y-%m-%d')
+
+        print(noteDate_str)
+        print(noteDate.strftime('%Y-%m-%d'))
+        #startDate, endDate
+        
+        return data_dict
+    except ValueError as e: 
+        logfile("Error: " + e )
         return False
 
 
