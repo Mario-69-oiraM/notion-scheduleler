@@ -18,15 +18,12 @@ import config
 import string
 import datetime
 from helper import updateheartbeat, SaveResult, logfile
-from notionHelper import GetDatabaseQuery, UpdatePageTitle,AppendLinktoPage, IsNoteinRange
+from notionHelper import GetDatabaseQuery, UpdatePageTitle,AppendLinktoPage, IsNoteinRange, AppendParagraphtoPage
 
 level =logging.DEBUG
 
 def ReadActions():
-    #read report table 
-    # Start Date
-    # End Date
-    # Ready
+    
     logfile('readActions')
     filter = ' {"filter": { "or": [ '
     filter += '{ "property": "Ready", "checkbox" : {"equals": false } }'
@@ -61,11 +58,12 @@ def ReadActions():
                     Action_Item_pageURL = Action_Item["url"]
                     Action_Item_ID = Action_Item["id"]
                     
+                    AppendParagraphtoPage(ReportItem_id,'Action:')
+                    AppendLinktoPage(ReportItem_id,Action_Item_ID)
+
                     #for Person in Action_Item["properties"]["People"]["relation"]:
                     #    People.append(Person)
                         #response = requests.request("GET", config.NotionAPIPages + Person, headers=config.NotionHeader(config.tokenActions))
-                    AppendLinktoPage(ReportItem_id,Action_Item_ID)
-                    #SaveResult(Action_Item["properties"]["Notes"]["relation"])
                     for Note_id in Action_Item["properties"]["Notes"]["relation"]:
                         if IsNoteinRange(Note_id["id"], startDate, endDate) :
                             AppendLinktoPage(ReportItem_id,Note_id["id"])
