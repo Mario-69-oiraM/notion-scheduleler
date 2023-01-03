@@ -69,7 +69,7 @@ def ReadRepeatfromNotionAction():
                     
                     while go == False:
                         tempdoDate = tempdoDate + datetime.timedelta(days=daymovement)
-                        print(str(tempdoDate) + ' ' + str(tempdoDate.isoweekday()))
+                        #print(str(tempdoDate) + ' ' + str(tempdoDate.isoweekday()))
 
                         if tempdoDate.month > expectedMonth:
                             daymovement = -1                        
