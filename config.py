@@ -5,6 +5,7 @@ import enum
 Weekly = 'Weekly'
 Every_work_day = 'Every work day'
 Bi_weekly = "Bi-weekly"
+Monthly = 'Monthly'
 
 logfile = 'scheduleler.log'
 tokenHeartbeat = 'NOTION_TOKEN_heartbeat'
