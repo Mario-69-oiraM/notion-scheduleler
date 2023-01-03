@@ -3,6 +3,7 @@
 ##
 ##  export NOTION_TOKEN=
 ##  export NOTION_TOKEN_heartbeat=
+# comment 
 
 from json import decoder
 import requests 
@@ -16,7 +17,7 @@ import config
 import string
 import datetime
 from helper import updateheartbeat ,SaveResult, logfile
-
+import calendar
 
 def ReadRepeatfromNotionAction():
     
@@ -27,6 +28,7 @@ def ReadRepeatfromNotionAction():
     data = ' {"filter": { "or": [ '
     data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Weekly + '" } }, '
     data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Every_work_day + '" } }, '
+    data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Monthly + '" } }, '
     data +=  ' { "property": "Repeat", "select" : {"equals": "' + config.Bi_weekly + '" } }'
     data +=  ' ] } } '
 
@@ -55,6 +57,32 @@ def ReadRepeatfromNotionAction():
                 if done == True and repeat == config.Bi_weekly: # and (weeknumber - 1) > (weeknumber_doDate) 
                     dodate = dodate + datetime.timedelta(days=14)
                     UpdateAction(id, FromDate, dodate, title, repeat)
+                    
+                if done == True and repeat == config.Monthly:
+                    exitCtr = 0
+                    go = False
+                    days_in_month = (calendar.monthrange(dodate.year, dodate.month)[1]) + 1
+                    expectedMonth = dodate.month + 1
+                    
+                    tempdoDate = dodate + datetime.timedelta(days=days_in_month)
+                    daymovement = -1 
+                    
+                    while go == False:
+                        tempdoDate = tempdoDate + datetime.timedelta(days=daymovement)
+                        print(str(tempdoDate) + ' ' + str(tempdoDate.isoweekday()))
+
+                        if tempdoDate.month > expectedMonth:
+                            daymovement = -1                        
+                        elif tempdoDate.month < expectedMonth:
+                                daymovement = 1
+                        if (tempdoDate.isoweekday() < 6) and (tempdoDate.month == expectedMonth):
+                            go = True
+                        if exitCtr > 15:
+                            logfile('Error: Monthly date select fail' + title) 
+                            go = True
+                        exitCtr += 1
+                            
+                    UpdateAction(id, FromDate, tempdoDate, title, repeat)
 
                 elif done == True and repeat == config.Every_work_day: #and dodate < today 
                     dodate = dodate + datetime.timedelta(days=1)
