@@ -150,7 +150,7 @@ def UpdateAction(id, FromDate, Action_Date, title, repeat):
 def main():
     try: 
         if (str(os.getenv(config.tokenActions)) != 'None') and (str(os.getenv(config.tokenHeartbeat)) != 'None'):
-            updateheartbeat("Heartbeat - Action schedule")
+            #updateheartbeat("Heartbeat - Action schedule")
             ReadRepeatfromNotionAction()
         else:
             logfile("Error: NOTION_TOKEN of NOTION_TOKEN_heartbeat missing! " )
