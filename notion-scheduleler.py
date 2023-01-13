@@ -51,8 +51,7 @@ def ReadRepeatfromNotionAction():
                     dodate = datetime.datetime.strptime(OneItem["properties"]["Do Date"]["date"]["start"],'%Y-%m-%d').date()    
                 except:
                     dodate = today
-                    logfile("Task: " + title )
-
+                    
                 FromDate = dodate
                 weeknumber_doDate = dodate.isocalendar()[1] + 1
 
