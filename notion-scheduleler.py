@@ -44,12 +44,18 @@ def ReadRepeatfromNotionAction():
                 SaveResult(OneItem)
                 id = OneItem["id"]
                 title = OneItem["properties"]["Name"]["title"][0]["text"]["content"]
+
                 repeat = OneItem["properties"]["Repeat"]["select"]["name"]
                 done = OneItem["properties"]["Done"]["checkbox"]
-                dodate = datetime.datetime.strptime(OneItem["properties"]["Do Date"]["date"]["start"],'%Y-%m-%d').date()
+                try:
+                    dodate = datetime.datetime.strptime(OneItem["properties"]["Do Date"]["date"]["start"],'%Y-%m-%d').date()    
+                except:
+                    dodate = today
+                    logfile("Task: " + title )
+
                 FromDate = dodate
                 weeknumber_doDate = dodate.isocalendar()[1] + 1
-                
+
                 if done == True and repeat == config.Weekly: #and weeknumber > weeknumber_doDate:
                     dodate = dodate + datetime.timedelta(days=7)
                     UpdateAction(id, FromDate, dodate, title, repeat)
