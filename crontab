@@ -4,4 +4,4 @@ NOTION_TOKEN_heartbeat=
 PYTHONPATH=/app/appRequirements
  
 # Run automation every min
-*/10 * * * * bash /app/runSchedule.sh >> /var/log/myjob.log 2>&1
+*/7 * * * * bash /app/runSchedule.sh >> /var/log/myjob.log 2>&1
