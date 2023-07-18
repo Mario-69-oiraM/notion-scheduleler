@@ -3,14 +3,18 @@ FROM python:3.8
 # set the working directory
 WORKDIR /app
 
+RUN apt-get update && apt-get -y install pip
+RUN sudo apt-get install ffmpeg
+
+
 # install dependencies
-COPY ./requirements.txt /app
+COPY requirements.txt /app
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r requirements.txt --target=/app/appRequirements
 ENV PYTHONPATH=/app/appRequirements
 
 RUN apt-get update && apt-get -y install cron
-RUN apt-get update && apt-get -y install nano
+#RUN apt-get update && apt-get -y install nano
 
 #RUN crontab -l | { cat; echo "*/1 * * * * bash /app/runSchedule"; } | crontab -
 
